@@ -1,226 +1,136 @@
-<!doctype html>
 
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Matka Tools Panel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Panel</title>
   <style>
-    :root{--bg:#f6f7fb;--card:#fff;--accent:#FF6B35;--muted:#666}
-    body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);margin:0;padding:24px;color:#111}
-    .container{max-width:980px;margin:0 auto}
-    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,0.06);margin-bottom:16px}
-    h1{margin:0 0 12px;font-size:20px;color:var(--accent)}
-    label{display:block;margin:8px 0 6px;font-weight:600}
-    input[type=text], input[type=password], select, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box}
-    .row{display:flex;gap:12px}
-    .col{flex:1}
-    button{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
-    .small{font-size:13px;color:var(--muted)}
-    .tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .result{background:#fff;padding:10px;border-radius:8px;border:1px dashed #eee;min-height:60px}
-    .locked{opacity:0.9}
-    .warn{color:#a33;font-weight:700}
-    .footer{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+    :root{--accent:#ff6b35;--bg:#f3f4f6;--card:#ffffff}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg)}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .card{background:var(--card);border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:0 8px 18px rgba(0,0,0,.06)}
+    h1,h2{margin:0 0 10px;color:var(--accent)}
+    label{display:block;margin-top:8px;font-weight:700}
+    input,select,textarea,button{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #ddd}
+    button{background:var(--accent);color:#fff;border:none;cursor:pointer}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1;min-width:260px}
+    .result{border:1px dashed #ddd;border-radius:8px;padding:10px;margin-top:8px;background:#fff}
+    .hidden{display:none}
+    .topbar{display:flex;justify-content:space-between;align-items:center}
+    marquee{padding:8px 0;color:#111}
   </style>
 </head>
-<body>
-  <div class="container">
-    <div id="loginCard" class="card">
-      <h1>Matka Panel — Login (Admin Sonu)</h1>
-      <div>
-        <label>Username</label>
-        <input id="loginUser" type="text" placeholder="Enter username" />
-        <label>Password</label>
-        <input id="loginPass" type="password" placeholder="Enter password" />
-        <div style="margin-top:12px"><button id="loginBtn">Login</button></div>
-        <div id="loginMsg" class="small" style="margin-top:10px"></div>
-      </div>
-    </div><div id="mainApp" style="display:none">
-  
-    <div class="small">Username: <strong>Sarja7890</strong> — Password: <strong>Sarja7017</strong></div>
-    <div class="warn" style="margin-top:6px">Note: When you try to run any subtool without unlocking, you'll see a payment message: "Make payment 65,000 to unlock". After providing the unlock credentials the tools will run locally in this page.</div>
-  </div>
-
-  <div class="footer"><marquee behavior="scroll" direction="left">Notification: Admin Sonu | Daily contribution: ₹500 | Bank: Indian Bank | A/c No: 59058861670 | IFSC: IDIB000B881</marquee></div>
+<body><div class="wrap">  <!-- LOGIN -->  <div id="loginBox" class="card">
+    <h1>Admin Login</h1>
+    <label>Username</label>
+    <input id="user" placeholder="Enter username" />
+    <label>Password</label>
+    <input id="pass" type="password" placeholder="Enter password" />
+    <button onclick="login()">Login</button>
+    <p id="msg" style="color:red"></p>
+  </div>  <!-- PANEL -->  <div id="panel" class="hidden">
+    <div class="card topbar">
+      <h1>Welcome Sonu (Admin)</h1>
+      <select id="market">
+        <option>Kalyan</option>
+        <option>Main Bazar</option>
+        <option>Milan Day</option>
+        <option>Shridevi</option>
+        <option>Time Bazar</option>
+        <option>Supreme Day</option>
+        <option>Kalyan Night</option>
+        <option>Milan Night</option>
+        <option>Shridevi Night</option>
+      </select>
+    </div><!-- BM TOOL -->
+<div class="card">
+  <h2>BM Tool (Fix Ank)</h2>
+  <label>Previous Day Jodi (2 digit)</label>
+  <input id="bmJodi" maxlength="2" />
+  <button onclick="bmTool()">Get Ank</button>
+  <div id="bmRes" class="result"></div>
 </div>
 
-  </div>  <script>
-    // LOGIN
-    const loginBtn = document.getElementById('loginBtn');
-    const loginMsg = document.getElementById('loginMsg');
-    const loginCard = document.getElementById('loginCard');
-    const mainApp = document.getElementById('mainApp');
-    const loggedUser = document.getElementById('loggedUser');
+<!-- AINO PANEL -->
+<div class="card">
+  <h2>AinO Panel</h2>
+  <label>Previous 3 Digit Panel</label>
+  <input id="ainoPanel" maxlength="3" />
+  <label>Previous Day Jodi</label>
+  <input id="ainoJodi" maxlength="2" />
+  <button onclick="ainoTool()">Get Panel</button>
+  <div id="ainoRes" class="result"></div>
+</div>
 
-    const ONBOARD_USER = 'sonu';
-    const ONBOARD_PASS = 'sonu123';
+<!-- JS ADVANCED -->
+<div class="card">
+  <h2>JS Advanced Tool</h2>
+  <label>Enter 4 Ank (comma separated)</label>
+  <input id="jsAnk" placeholder="1,3,6,7" />
+  <button onclick="jsTool()">Cut Weak Ank</button>
+  <div id="jsRes" class="result"></div>
+</div>
 
-    loginBtn.addEventListener('click', ()=>{
-      const u = document.getElementById('loginUser').value.trim();
-      const p = document.getElementById('loginPass').value.trim();
-      if(u === ONBOARD_USER && p === ONBOARD_PASS){
-        loginCard.style.display = 'none';
-        mainApp.style.display = 'block';
-        loggedUser.textContent = u;
-        loginMsg.textContent = '';
-      } else {
-        loginMsg.textContent = 'Invalid username or password';
-      }
-    });
-      const p = document.getElementById('loginPass').value;
-      if(u===ONBOARD_USER && p===ONBOARD_PASS){
-        loginCard.style.display='none';
-        mainApp.style.display='block';
-        loggedUser.textContent = u;
-      } else {
-        loginMsg.textContent = 'Invalid credentials.';
-      }
-    });
+<!-- CALCULATOR VM -->
+<div class="card">
+  <h2>Calculator VM</h2>
+  <label>Enter All Panels (comma separated)</label>
+  <textarea id="calcInp" rows="3"></textarea>
+  <button onclick="calcTool()">Confirm Panels</button>
+  <div id="calcRes" class="result"></div>
+</div>
 
-    // SUBTOOL UNLOCK
-    let unlocked = true; // all tools enabled
-    document.getElementById('openUnlock').addEventListener('click', ()=>{
-      if(unlocked){alert('Subtools already unlocked');return}
-      const user = prompt('Enter unlock username:');
-      const pass = prompt('Enter unlock password:');
-      if(user === 'Sarja7890' && pass === 'Sarja7017'){
-        unlocked = true;
-        alert('Subtools unlocked. You may use the tools now. Note: This page simulates unlocking locally.');
-      } else {
-        alert('Make payment 65,000 to unlock (simulation). Provide correct unlock credentials to proceed.');
-      }
-    });
+<marquee>Admin Sonu | Daily ₹500 | Indian Bank | A/C 59058861670 | IFSC IDIB000B881</marquee>
 
-    // Helper mapping: final-digit -> suggested families (based on your chart)
-    const finalMap = {
-      0: [2,3,5,9],
-      1: [4,5,7,9],
-      2: [0,2,6,8],
-      3: [0,1,8,9],
-      4: [1,3,6,7],
-      5: [2,4,6,7],
-      6: [0,3,6,8],
-      7: [1,2,4,7],
-      8: [2,5,6,8],
-      9: [1,4,7,8]
-    };
+  </div>
+</div><script>
+// LOGIN
+function login(){
+  var u=document.getElementById('user').value.trim();
+  var p=document.getElementById('pass').value.trim();
+  if(u==='sonu' && p==='sonu123'){
+    document.getElementById('loginBox').classList.add('hidden');
+    document.getElementById('panel').classList.remove('hidden');
+  }else{
+    document.getElementById('msg').innerText='Wrong username or password';
+  }
+}
 
-    // Example panna lists (short examples from earlier data) used to form sample panels
-    const pannaExamples = {
-      0: ['145','190','460','569','235','280','370','578'],
-      1: ['128','137','236','678','245','290','470','579'],
-      2: ['129','147','246','679','345','390','480','589'],
-      3: ['120','157','256','670','139','148','346','689'],
-      4: ['130','158','356','680','239','248','347','789'],
-      5: ['140','159','456','690','230','258','357','780'],
-      6: ['123','178','268','367','240','259','457','790'],
-      7: ['124','179','269','467','340','359','458','890'],
-      8: ['125','170','260','567','134','189','369','468'],
-      9: ['135','180','360','568','234','289','379','478']
-    };
+// HELPERS
+function sumUnit(str){return str.split('').reduce((a,b)=>a+parseInt(b||0),0)%10}
 
-    // Utility functions
-    function unitsDigitOfSumStr(s){
-      const digits = s.split('').filter(c=>/\d/.test(c)).map(Number);
-      const sum = digits.reduce((a,b)=>a+b,0);
-      return sum % 10;
-    }
+// BM TOOL
+function bmTool(){
+  var j=document.getElementById('bmJodi').value;
+  if(j.length!==2){bmRes.innerText='Enter 2 digits';return}
+  var f=sumUnit(j);
+  var map={0:'2,3,5,9',1:'4,5,7,9',2:'0,2,6,8',3:'0,1,8,9',4:'1,3,6,7',5:'2,4,6,7',6:'0,3,6,8',7:'1,2,4,7',8:'2,5,6,8',9:'1,4,7,8'};
+  bmRes.innerHTML='Final Ank: <b>'+f+'</b><br>Suggested: '+map[f];
+}
 
-    function ensureUnlocked(tool){ return true; }
-      return true;
-    }
+// AINO TOOL
+function ainoTool(){
+  var p=document.getElementById('ainoPanel').value;
+  var j=document.getElementById('ainoJodi').value;
+  if(p.length!==3||j.length!==2){ainoRes.innerText='Enter valid inputs';return}
+  var f=sumUnit(j);
+  ainoRes.innerHTML='Based on Jodi '+j+' (Final '+f+')<br>Fixed Panel Sample: '+p;
+}
 
-    // Handlers for subtools
-    document.querySelectorAll('.useSub').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const tool = btn.getAttribute('data-tool');
-        if(!ensureUnlocked(tool)) return;
-        if(tool==='bm') runBM();
-        if(tool==='aino') runAinO();
-        if(tool==='jsadv') runJSAdv();
-        if(tool==='calc') runCalc();
-      });
-    });
+// JS ADVANCED
+function jsTool(){
+  var a=document.getElementById('jsAnk').value.split(',').map(x=>parseInt(x));
+  if(a.length!==4){jsRes.innerText='Enter 4 ank';return}
+  var cut=Math.min(...a);
+  jsRes.innerHTML='Cut Ank: <b>'+cut+'</b><br>Remaining: '+a.filter(x=>x!==cut).join(',');
+}
 
-    // BM Tool implementation
-    function runBM(){
-      const input = document.getElementById('bmInput').value.trim();
-      if(!/^[0-9]{2}$/.test(input)){document.getElementById('bmResult').textContent='Please enter exactly two digits (e.g. 03)';return}
-      const final = unitsDigitOfSumStr(input);
-      const families = finalMap[final] || [];
-      // produce 4 digits (families) with a simple 'passing chance' score (higher if family equals final)
-      const results = families.map(f=>({digit:f,score: (f===final?0.9:0.6)}));
-      let html = '<strong>Input Jodi:</strong> '+input+' → <strong>Final</strong>: '+final+'\n\n';
-      html += '<div class="small">Suggested digits (with passing chance heuristic):</div><ul>';
-      results.forEach(r=>{html += '<li>'+r.digit+' — passing chance: '+(r.score*100).toFixed(0)+'%</li>'});
-      html += '</ul>';
-      document.getElementById('bmResult').innerHTML = html;
-    }
-
-    // AinO Panel implementation
-    function runAinO(){
-      const panel = document.getElementById('ainoPanelInput').value.trim();
-      const jodi = document.getElementById('ainoJodiInput').value.trim();
-      if(!/^[0-9]{3}$/.test(panel)){document.getElementById('ainoResult').textContent='Enter a 3-digit panel (e.g. 128)';return}
-      if(!/^[0-9]{2}$/.test(jodi)){document.getElementById('ainoResult').textContent='Enter previous double jodi (e.g. 03)';return}
-      const panelUnit = unitsDigitOfSumStr(panel); // unit of 3-digit
-      const jodiFinal = unitsDigitOfSumStr(jodi);
-      // Choose panna families based on jodi final and panel unit; combine to produce 4 suggested fixed 3-digit panels
-      const fams = finalMap[jodiFinal] || [];
-      const pool = [];
-      fams.forEach(f=>{pool.push(...(pannaExamples[f]||[]))});
-      // ensure pool unique
-      const uniq = Array.from(new Set(pool));
-      // pick up to 4 panels deterministic: first 4
-      const chosen = uniq.slice(0,4);
-      let html = '<strong>Input panel:</strong> '+panel+' (unit:'+panelUnit+')<br>';
-      html += '<strong>Input jodi:</strong> '+jodi+' (final:'+jodiFinal+')<br><br>';
-      html += '<div class="small">Fixed panels (suggested):</div><ol>' + chosen.map(x=>'<li>'+x+'</li>').join('') + '</ol>';
-      // also show a suggested jodi (take units of chosen[0])
-      if(chosen.length) html += '<div class="small">Suggested Jodi from chosen panel: '+ chosen[0].slice(0,2) +'</div>';
-      document.getElementById('ainoResult').innerHTML = html;
-    }
-
-    // JS Advanced implementation
-    function runJSAdv(){
-      const raw = document.getElementById('jsAdvInput').value.trim();
-      const parts = raw.split(',').map(s=>s.trim()).filter(s=>s!=="");
-      if(parts.length!==4){document.getElementById('jsAdvResult').textContent='Enter exactly 4 ank separated by commas';return}
-      // Heuristic: compute score as (numeric value % 10) + frequency in example lists
-      // Simpler deterministic rule: cut the ank with smallest numeric value
-      const nums = parts.map(p=>parseInt(p,10));
-      const minVal = Math.min(...nums);
-      const remaining = nums.filter(n=>n!==minVal);
-      let html = '<div class="small">Input ank: '+nums.join(', ')+'</div>';
-      html += '<div>Cut ank (lowest heuristic): <strong>'+minVal+'</strong></div>';
-      html += '<div class="small">Remaining ank: '+remaining.join(', ')+'</div>';
-      document.getElementById('jsAdvResult').innerHTML = html;
-    }
-
-    // Calculator VM implementation
-    function runCalc(){
-      const raw = document.getElementById('calcInput').value.trim();
-      const parts = raw.split(',').map(s=>s.trim()).filter(s=>/^[0-9]{3}$/.test(s));
-      if(parts.length<3){document.getElementById('calcResult').textContent='Enter at least 3 panels (3-digit) separated by commas';return}
-      // Build frequency of unit digits
-      const units = parts.map(p=>unitsDigitOfSumStr(p));
-      const freq = {};
-      units.forEach(u=>freq[u]=(freq[u]||0)+1);
-      // pick top 4-5 most frequent units
-      const sorted = Object.keys(freq).sort((a,b)=>freq[b]-freq[a]).map(Number);
-      const pick = sorted.slice(0,5);
-      // form sample 3-digit panels from corresponding pannaExamples by taking first entries
-      const panels = [];
-      pick.forEach(u=>{
-        const ex = pannaExamples[u]||[];
-        if(ex.length) panels.push(ex[0]);
-      });
-      let html = '<div class="small">Input panels: '+parts.join(', ')+'</div>';
-      html += '<div>Top unit digits: '+pick.join(', ')+'</div>';
-      html += '<div class="small">Confirmed 3-digit samples:</div><ol>'+panels.map(p=>'<li>'+p+'</li>').join('')+'</ol>';
-      document.getElementById('calcResult').innerHTML = html;
-    }
-
-  </script></body>
+// CALCULATOR VM
+function calcTool(){
+  var arr=document.getElementById('calcInp').value.split(',').map(x=>x.trim());
+  if(arr.length<3){calcRes.innerText='Enter more panels';return}
+  calcRes.innerHTML='Confirmed Panels: '+arr.slice(0,5).join(',');
+}
+</script></body>
 </html>
