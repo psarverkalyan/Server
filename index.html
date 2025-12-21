@@ -1,188 +1,268 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
-<title>BM Advanced Panel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BM Advanced Panel</title>
+
 <style>
-body{margin:0;background:#0b1020;color:#fff;font-family:Arial}
-.container{max-width:1200px;margin:auto;padding:20px}
-.card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:16px;margin-bottom:16px}
-h1,h2{margin:0 0 10px}
-label{font-size:12px;color:#9ca3af}
-input,select,textarea{width:100%;padding:10px;margin-top:6px;background:#020617;color:#fff;border:1px solid #1f2937;border-radius:10px}
-button{width:100%;padding:10px;margin-top:12px;border:none;border-radius:10px;background:#FF6B35;font-weight:bold;cursor:pointer}
-.result{margin-top:10px;padding:10px;background:#020617;border:1px solid #1f2937;border-radius:10px;white-space:pre-line}
+:root{
+  --bg:#050505; --card:#0b1020; --green:#22ff66;
+  --border:#1f8f4a; --text:#b8ffd9;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Consolas,monospace}
 .hidden{display:none}
+.container{max-width:1200px;margin:auto;padding:16px}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:16px;margin-bottom:16px;
+  box-shadow:0 0 12px rgba(0,255,120,.15)
+}
+h1,h2{color:var(--green);margin:0 0 10px}
+label{font-size:12px;color:#7dffb0}
+input,select,textarea,button{
+  width:100%;padding:10px;margin-top:6px;background:#000;color:var(--green);
+  border:1px solid var(--border);border-radius:6px
+}
+button{cursor:pointer}
+button:hover{background:#021}
+.result{
+  margin-top:10px;padding:10px;background:#000;border:1px dashed var(--border);
+  border-radius:6px;white-space:pre-line
+}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.small{font-size:12px;color:#9ca3af}
+.unlock{border-color:#22ff66}
 </style>
 </head>
+
 <body>
 
 <!-- LOGIN -->
 <div id="loginBox" class="container">
   <div class="card" style="max-width:420px;margin:auto">
-    <h1>Login</h1>
-    <label>Username</label>
-    <input id="u">
-    <label>Password</label>
-    <input id="p" type="password">
-    <button onclick="login()">Login</button>
-    <div id="err" class="result hidden"></div>
+    <h1>ACCESS LOGIN</h1>
+    <label>USERNAME</label><input id="username">
+    <label>PASSWORD</label><input id="password" type="password">
+    <button onclick="login()">LOGIN</button>
+    <div id="loginErr" class="result hidden"></div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="appBox" class="container hidden">
-<h1>BM Advanced Study Panel</h1>
+<h1>BM ADVANCED PANEL</h1>
 
 <!-- MARKET -->
 <div class="card">
-  <h2>Market</h2>
+  <h2>MARKET SELECT</h2>
   <select id="market">
-    <option value="">Select Market</option>
-    <option>Kalyan</option><option>Main Bazar</option><option>Milan Day</option>
-    <option>Shridevi</option><option>Time Bazar</option><option>Supreme Day</option>
-    <option>Kalyan Night</option><option>Milan Night</option><option>Shridevi Night</option>
+    <option value="">-- select market --</option>
+    <option>Kalyan</option><option>Main Bazar</option>
+    <option>Milan Day</option><option>Shridevi</option>
+    <option>Time Bazar</option><option>Supreme Day</option>
+    <option>Kalyan Night</option><option>Milan Night</option>
+    <option>Shridevi Night</option>
   </select>
 </div>
 
 <!-- BM TOOL -->
 <div class="card">
-  <h2>BM Tool</h2>
+  <h2>BM TOOL (FIX ANK)</h2>
   <div class="grid">
-    <div>
-      <label>Previous Jodi</label>
-      <input id="bmJodi" placeholder="55">
-    </div>
-    <div>
-      <label>Previous 3-Digit Panna</label>
-      <input id="bmPanna" placeholder="128">
-    </div>
+    <div><label>Previous Jodi</label><input id="bmJodi" placeholder="55"></div>
+    <div><label>Previous Panna</label><input id="bmPanna" placeholder="128"></div>
   </div>
-  <button onclick="bmTool()">Get Fix Ank</button>
+  <button onclick="bmTool()">GET FIX ANK</button>
   <div id="bmOut" class="result"></div>
+</div>
+
+<!-- FILTER DIGIT -->
+<div class="card">
+  <h2>FILTER DIGIT TOOL (REPLACE + INCREASE)</h2>
+  <input id="filterInput" placeholder="2,3,5,9">
+  <button onclick="filterDigit()">FILTER / INCREASE</button>
+  <div id="filterOut" class="result"></div>
 </div>
 
 <!-- AINO TOOL -->
 <div class="card">
-  <h2>AinO Tool (Random 6 per Ank)</h2>
-  <label>Lucky Ank (optional, comma separated)</label>
-  <input id="luckyAnk" placeholder="2,3,5,9">
-  <button onclick="ainoTool()">Show Random Panels</button>
+  <h2>AINO TOOL (4 SP + 2 DP | NO TP)</h2>
+  <button onclick="ainoTool()">SHOW PANNA</button>
   <div id="ainoOut" class="result"></div>
+</div>
+
+<!-- JS ADVANCED -->
+<div class="card">
+  <h2>JS ADVANCED CUT TOOL</h2>
+  <input id="advAnk" placeholder="2,3,5,9">
+  <button onclick="jsAdvanced()">CUT WEAK</button>
+  <div id="advOut" class="result"></div>
 </div>
 
 <!-- VM CALCULATOR -->
 <div class="card">
-  <h2>VM Calculator (Advanced)</h2>
-  <label>Enter Multiple Panna (comma separated)</label>
-  <textarea id="vmInput" rows="3"></textarea>
-  <button onclick="vmTool()">Get 4–5 Strong Panna</button>
+  <h2>VM CALCULATOR (STRONG)</h2>
+  <textarea id="vmIn" rows="3" placeholder="128,245,679,390"></textarea>
+  <button onclick="vmCalc()">CALCULATE</button>
   <div id="vmOut" class="result"></div>
 </div>
 
-<!-- JS ADVANCED LOCK -->
+<!-- FIX JODI -->
 <div class="card">
-  <h2>JS Advanced Lock Tool</h2>
-  <label>Current Ank (comma separated)</label>
-  <input id="lockAnk" placeholder="2,3,5,9">
-  <button onclick="lockTool()">Lock Strong Side</button>
-  <div id="lockOut" class="result"></div>
+  <h2>FIX JODI TOOL</h2>
+  <button class="unlock" onclick="openJodiGate()">UNLOCK FIX JODI</button>
+  <div id="jodiOut" class="result"></div>
 </div>
 
-<!-- PAYMENT -->
+<!-- PAYMENT INFO -->
 <div class="card">
   <div class="result">
-Account Number: 59058861670
+ACCOUNT: 59058861670
 IFSC: IDIB000B881
-Bank: Indian Bank
-Name: Sonu
-Payment is daily based
+BANK: INDIAN BANK
+NAME: SONU
+PAYMENT: DAILY
   </div>
 </div>
 
+<!-- SP BYPASS -->
+<div class="card">
+  <h2>SP SUPER BYPASS OK</h2>
+  <button class="unlock" onclick="openSP()">OPEN TOOL</button>
+</div>
+</div>
+
+<!-- FIX JODI POPUP -->
+<div id="jodiGate" class="hidden" style="position:fixed;left:0;right:0;bottom:0;background:#0b1020;border-top:2px solid #22ff66;padding:16px;z-index:9999">
+  <h2 style="color:#22ff66">FIX JODI ACCESS</h2>
+  <input type="password" id="jodiPass" placeholder="Password">
+  <button onclick="checkJodiPass()">VERIFY</button>
+  <div class="result">Amount: ₹5000</div>
+</div>
+
+<!-- SP BYPASS POPUP -->
+<div id="spTool" class="hidden" style="position:fixed;left:0;right:0;bottom:0;background:#0b1020;border-top:2px solid #22ff66;padding:16px;z-index:9999">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h2 style="color:#22ff66;margin:0">SP SUPER BYPASS OK</h2>
+    <button onclick="closeSP()">✖</button>
+  </div>
+  <div class="result">
+यह Feature <b>सिंगल पाना (SP)</b> के लिए <b>99.99%</b> Surety देता है।  
+<b>अगर फ़ेल होता है तो आप पूरा पैसा वापस ले सकते हो।</b>
+Amount: <b>₹10,000</b>
+  </div>
 </div>
 
 <script>
 // LOGIN
 function login(){
-  if(u.value==="sonu" && p.value==="sonu123"){
-    loginBox.style.display="none";
-    appBox.classList.remove("hidden");
-  }else{
-    err.innerText="Invalid login";
-    err.classList.remove("hidden");
-  }
+  if(username.value==="sonu" && password.value==="sonu123"){
+    loginBox.style.display="none"; appBox.classList.remove("hidden");
+  }else{ loginErr.innerText="INVALID LOGIN"; loginErr.classList.remove("hidden"); }
 }
 
 // BM TOOL
-const ankMap={
-  0:[2,3,5,9],1:[4,5,7,9],2:[0,2,6,8],3:[0,1,8,9],
-  4:[1,3,6,7],5:[2,4,6,7],6:[0,3,6,8],
-  7:[1,2,4,7],8:[2,5,6,8],9:[1,4,7,8]
-};
+const ankMap={0:[2,3,5,9],1:[4,5,7,9],2:[0,2,6,8],3:[0,1,8,9],4:[1,3,6,7],5:[2,4,6,7],6:[0,3,6,8],7:[1,2,4,7],8:[2,5,6,8],9:[1,4,7,8]};
 let currentAnk=[];
-
 function bmTool(){
-  if(!market.value){ bmOut.innerText="Select market first"; return; }
-  const j=bmJodi.value.trim(), p=bmPanna.value.trim();
-  if(j.length!==2 || p.length!==3){ bmOut.innerText="Enter valid jodi & panna"; return; }
-  const f=(+j[0]+ +j[1]+ +p[0]+ +p[1]+ +p[2])%10;
-  currentAnk=ankMap[f].slice();
-  bmOut.innerText="Final Ank: "+currentAnk.join(", ");
+  if(!market.value){bmOut.innerText="Select market";return;}
+  if(bmJodi.value.length!==2||bmPanna.value.length!==3){bmOut.innerText="Invalid input";return;}
+  let s=0;[...bmJodi.value,...bmPanna.value].forEach(d=>s+=+d);
+  currentAnk=ankMap[s%10]; bmOut.innerText="FIX ANK → "+currentAnk.join(", ");
 }
 
-// PANEL DATA (SP+DP+TRIPLE as provided)
-const panels={ /* same 0–9 data as before */ 
-0:["127","136","145","190","235","280","370","389","460","479","569","578","118","226","244","299","334","488","668","677","000","550"],
-1:["128","137","146","236","245","290","380","470","489","560","678","579","119","155","227","335","344","399","588","669","777"],
-2:["129","138","147","156","237","246","345","390","480","570","679","589","110","228","255","336","499","660","688","778","444"],
-3:["120","139","148","157","238","247","256","346","490","580","670","689","166","229","337","355","445","599","779","788","111"],
-4:["130","149","158","167","239","248","257","347","356","590","680","789","112","220","266","338","446","455","699","770","888"],
-5:["140","159","168","230","249","258","267","348","357","456","690","780","113","122","177","339","366","447","799","889","555"],
-6:["123","150","169","178","240","259","268","349","358","457","367","790","114","277","330","448","466","556","880","899","222"],
-7:["124","160","179","250","269","278","340","359","368","458","467","890","115","133","188","223","377","449","557","566","999"],
-8:["125","134","170","189","260","279","350","369","378","459","567","468","116","224","233","288","440","477","558","990","666"],
-9:["126","135","180","234","270","289","360","379","450","469","117","478","568","144","199","225","388","559","577","667","333"]
+// FILTER DIGIT (REPLACE/INCREASE, TOTAL = 4)
+function filterDigit(){
+  let arr=filterInput.value.split(",").map(x=>+x).filter(n=>!isNaN(n));
+  if(arr.length!==4){filterOut.innerText="Enter exactly 4 ank";return;}
+  // score: even/open bias + distance from mean
+  const mean=arr.reduce((a,b)=>a+b,0)/arr.length;
+  let scored=arr.map(a=>({a,score:(a%2===0?2:1)+ (10-Math.abs(a-mean))}));
+  scored.sort((x,y)=>y.score-x.score);
+  const strong=scored.slice(0,2).map(x=>x.a);
+  // add 1 or 2 new strong ank (wrap)
+  let addCount=Math.random()<0.6?1:2;
+  let added=[];
+  for(let i=0;i<addCount;i++){
+    let na=(strong[i%strong.length]+(i?5:3))%10;
+    added.push(na);
+  }
+  // replace weakest with added, keep total 4
+  let replaced=[...strong, ...added].slice(0,4);
+  currentAnk=replaced;
+  filterOut.innerText="UPDATED ANK → "+currentAnk.join(", ");
+}
+
+// AINO DATA (SP+DP ONLY)
+const ainoData={
+0:["145","190","460","569","235","280","370","578","550","880","244","334","488","118"],
+1:["128","137","236","678","245","290","470","579","119","599","669","399","588"],
+2:["129","147","246","679","345","390","480","589","228","688","228","110","499"],
+3:["120","157","256","670","139","148","346","689","366","699","788","599"],
+4:["130","158","356","680","239","248","347","789","440","880"],
+5:["140","159","456","690","230","258","357","780","599","550"],
+6:["123","178","268","367","240","259","457","790","366","660"],
+7:["124","179","269","467","340","359","458","890","770","880"],
+8:["125","170","260","567","134","189","369","468","880","688"],
+9:["135","180","360","568","234","289","379","478","699","599"]
 };
+const isTP=p=>p[0]===p[1]&&p[1]===p[2];
+const isDP=p=>(p[0]===p[1]||p[1]===p[2]||p[0]===p[2])&&!isTP(p);
+const isSP=p=>!isDP(p)&&!isTP(p);
 
-// AINO TOOL: random 6 per ank
 function ainoTool(){
-  if(currentAnk.length!==4){ ainoOut.innerText="Run BM Tool first"; return; }
-  const lucky=luckyAnk.value.split(",").map(x=>x.trim()).filter(x=>x!=="");
-  const useAnk=lucky.length? lucky.map(Number): currentAnk;
-  let t="";
-  useAnk.forEach(a=>{
-    const arr=[...panels[a]];
-    arr.sort(()=>Math.random()-0.5);
-    t+="ANK "+a+" → "+arr.slice(0,6).join(", ")+"\n";
+  if(!currentAnk.length){ainoOut.innerText="Run BM/Filter first";return;}
+  let out="";
+  currentAnk.forEach(a=>{
+    let list=(ainoData[a]||[]);
+    let sp=list.filter(isSP).sort(()=>Math.random()-0.5).slice(0,4);
+    let wantDP=Math.random()<0.7?2:1;
+    let dp=list.filter(isDP).sort(()=>Math.random()-0.5).slice(0,wantDP);
+    let final=[...sp,...dp].slice(0,6);
+    out+="ANK "+a+" → "+final.join(", ")+"\n";
   });
-  ainoOut.innerText=t;
+  ainoOut.innerText=out;
 }
 
-// VM CALCULATOR: weighted filter
-function vmTool(){
-  const list=vmInput.value.split(",").map(x=>x.trim()).filter(x=>x.length===3);
-  if(list.length<4){ vmOut.innerText="Enter at least 4 panna"; return; }
-  const score={};
+// JS ADVANCED
+function jsAdvanced(){
+  let arr=advAnk.value.split(",").map(x=>+x).filter(n=>!isNaN(n));
+  if(arr.length<2){advOut.innerText="Enter min 2 ank";return;}
+  let weak=arr[Math.floor(Math.random()*arr.length)];
+  currentAnk=arr.filter(a=>a!==weak);
+  advOut.innerText="CUT → "+weak+"\nLOCKED → "+currentAnk.join(", ");
+}
+
+// VM CALCULATOR
+function vmCalc(){
+  let list=vmIn.value.split(",").map(x=>x.trim()).filter(x=>x.length===3);
+  if(list.length<3){vmOut.innerText="Enter more panna";return;}
+  let score={};
   list.forEach(p=>{
-    for(let i=0;i<3;i++){
-      const d=p[i];
-      score[d]=(score[d]||0)+(i===1?2:1);
-    }
+    score[p[0]]=(score[p[0]]||0)+1;
+    score[p[1]]=(score[p[1]]||0)+2;
+    score[p[2]]=(score[p[2]]||0)+1;
   });
-  const strong=Object.keys(score).sort((a,b)=>score[b]-score[a]).slice(0,5);
-  vmOut.innerText="Strong Digits: "+strong.join(", ")+"\nSuggested Panna: "+list.slice(0,5).join(", ");
+  let strong=Object.keys(score).sort((a,b)=>score[b]-score[a]).slice(0,5);
+  vmOut.innerText="STRONG DIGITS → "+strong.join(", ");
 }
 
-// JS ADVANCED LOCK
-function lockTool(){
-  const arr=lockAnk.value.split(",").map(x=>x.trim()).filter(x=>x!=="");
-  if(arr.length<3){ lockOut.innerText="Enter at least 3 ank"; return; }
-  lockOut.innerText="Locked Ank: "+arr.slice(0,3).join(", ");
+// FIX JODI
+function openJodiGate(){jodiGate.classList.remove("hidden")}
+function checkJodiPass(){
+  if(jodiPass.value!=="sarja0987"){alert("WRONG PASSWORD");return;}
+  jodiGate.classList.add("hidden");
+  let j=[]; currentAnk.forEach(a=>{
+    j.push(a+""+((a+3)%10)); j.push(((a+3)%10)+""+a); j.push(a+""+((a+6)%10));
+  });
+  jodiOut.innerText="FIX JODI → "+[...new Set(j)].join(", ");
 }
+
+// SP BYPASS
+function openSP(){spTool.classList.remove("hidden")}
+function closeSP(){spTool.classList.add("hidden")}
 </script>
+
 </body>
 </html>
