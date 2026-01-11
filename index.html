@@ -3,132 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BM Secure Panel</title>
+<title>BM Secure System</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
 body{
-  background:black;
-  color:#00ff88;
+  margin:0;
+  background:radial-gradient(circle,#020a05,#000);
   font-family:monospace;
-  height:100vh;
+  color:#00ff9c;
   overflow:hidden;
 }
 .app{
-  width:100%;
   height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:10px;
 }
 .card{
-  width:92%;
+  width:100%;
   max-width:420px;
-  border:2px solid #00ff88;
+  background:rgba(0,20,10,0.95);
+  border:2px solid #00ff9c;
+  border-radius:14px;
   padding:20px;
-  box-shadow:0 0 25px #00ff88;
-  background:#020a05;
+  box-shadow:0 0 30px #00ff9c;
+  animation:zoom 1s ease;
 }
-h2{
+@keyframes zoom{
+  from{transform:scale(.8);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+.header{
   text-align:center;
-  margin-bottom:15px;
+  font-size:22px;
+  margin-bottom:10px;
+  animation:blink 1.5s infinite;
 }
-input{
-  width:100%;
-  padding:12px;
+@keyframes blink{
+  50%{opacity:.4;}
+}
+.line{
   margin:10px 0;
-  background:black;
-  border:1px solid #00ff88;
-  color:#00ff88;
-  font-size:16px;
+  font-size:14px;
+  line-height:1.6;
+  animation:type 1s ease;
 }
-button{
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  background:black;
-  border:1px solid #00ff88;
-  color:#00ff88;
-  font-size:16px;
+.red{color:#ff4444;}
+.box{
+  border:1px dashed #00ff9c;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
 }
-button:active{
-  background:#00ff88;
-  color:black;
+.footer{
+  margin-top:15px;
+  text-align:center;
+  font-size:12px;
+  color:#7dffbd;
 }
-.screen{display:none;}
-p{margin:8px 0;font-size:14px;}
-.small{font-size:12px;color:#7dffbd;}
-.alert{color:red;}
 </style>
 </head>
 
 <body>
 
 <div class="app">
+<div class="card">
 
-<!-- LOGIN -->
-<div class="card" id="login">
-<h2>🔐 Secure Login</h2>
-<input id="user" placeholder="User Name">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">LOGIN</button>
-<p id="msg" class="alert"></p>
+<div class="header">⚠ SYSTEM FINAL NOTICE</div>
+
+<div class="line"><b>Dear Amit Dattaram Redkar,</b></div>
+
+<div class="line">
+आपके New Feature Update Request और आपके Account से संबंधित  
+Gateway API Request हमारे सिस्टम को प्राप्त हुई थी।
 </div>
 
-<!-- POPUP -->
-<div class="card screen" id="popup">
-<h2>⚙ New Update</h2>
-<p>क्या आप New Add Services Game Update Feature लेना चाहते हैं?</p>
-<p><b>New Feature Details:</b></p>
-<p>* AllMarket Game Automatic Update Without Delay *</p>
-<button onclick="yes()">YES</button>
-<button onclick="no()">NO</button>
+<div class="line">
+रात <b>11:43 PM</b> पर की गई System Review में  
+हमारे <b>3 Attempt असफल</b> पाए गए।
 </div>
 
-<!-- YES -->
-<div class="card screen" id="yesScreen">
-<h2>✔ धन्यवाद</h2>
-<p>आपने Latest Feature चुना है।</p>
-<p>यह Feature Paid Mode में है।</p>
-<p><b>NB Update Tool Charge: ₹10000</b></p>
-<p> Payment Details:</p>
-<p>Account: 59058861670</p>
-<p>Bank:  Indian Bank</p>
-<p>Beneficiary: Sonu</p>
-<p class="small"></p>
+<div class="line">
+इसी कारण आपका Account और आपका Panel  
+अस्थायी रूप से <b class="red">Pending Mode</b> में डाल दिया गया है।
 </div>
 
-<!-- NO -->
-<div class="card screen" id="noScreen">
-<h2>ℹ Old Version</h2>
-<p>धन्यवाद आपने Old Version चुना।</p>
-<p>Your Next Update Is Under Processing</p>
-<p><b>JS Tool Week Charge: ₹5600</b></p>
-<p class="small">नोट: इस महीने JS Tool का चार्ज ₹200 बढ़ाया गया है।</p>
+<div class="box red">
+सोमवार (आज) के Charges:
+<br>Gateway & Feature Added: ₹19,000  
+<br>System Penalty & Panel Charge: ₹8,000  
+</div>
+
+<div class="line">
+यदि यह प्रक्रिया पूरी नहीं की जाती है,  
+तो Panel की Validity केवल <b>7 दिन</b> की रहेगी।  
+उसके बाद प्रतिदिन <b>₹8,000 (Fix Fine)</b> जोड़ा जाएगा।
+</div>
+
+<div class="footer">
+⚠ This is final Amount Not Discount.  
+<br>Thanks For Using Our Services
 </div>
 
 </div>
-
-<script>
-function login(){
- let u=document.getElementById("user").value;
- let p=document.getElementById("pass").value;
- if(u==="amit" && p==="Amit@321"){
-   document.getElementById("login").style.display="none";
-   document.getElementById("popup").style.display="block";
- }else{
-   document.getElementById("msg").innerText="गलत User Name या Password";
- }
-}
-function yes(){
- document.getElementById("popup").style.display="none";
- document.getElementById("yesScreen").style.display="block";
-}
-function no(){
- document.getElementById("popup").style.display="none";
- document.getElementById("noScreen").style.display="block";
-}
-</script>
+</div>
 
 </body>
 </html>
