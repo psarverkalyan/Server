@@ -3,111 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BM Secure System</title>
+<title>Status Panel</title>
 
 <style>
-body{
-  margin:0;
-  background:radial-gradient(circle,#020615,#000);
-  font-family:monospace;
-  color:#00cfff;
-  overflow:hidden;
-}
-.app{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:10px;
-}
-.card{
-  width:100%;
-  max-width:420px;
-  background:rgba(0,10,20,0.95);
-  border:2px solid #00cfff;
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 0 30px #00cfff;
-  animation:zoom 1s ease;
-}
-@keyframes zoom{
-  from{transform:scale(.8);opacity:0;}
-  to{transform:scale(1);opacity:1;}
-}
-.header{
-  text-align:center;
-  font-size:22px;
-  margin-bottom:10px;
-  animation:blink 1.5s infinite;
-}
-@keyframes blink{
-  50%{opacity:.4;}
-}
-.line{
-  margin:10px 0;
-  font-size:14px;
-  line-height:1.6;
-  animation:type 1s ease;
-}
-.red{color:#ff4d6d;}
-.box{
-  border:1px dashed #00cfff;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-}
-.footer{
-  margin-top:15px;
-  text-align:center;
-  font-size:12px;
-  color:#7fdfff;
-}
+  body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    font-family: Arial, sans-serif;
+  }
+
+  .panel{
+    background:#ffffff;
+    width:90%;
+    max-width:420px;
+    padding:24px;
+    border-radius:16px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    text-align:center;
+  }
+
+  h2{margin:0 0 10px;color:#111;}
+  p{font-size:16px;line-height:1.6;color:#333;}
+
+  .highlight{font-weight:bold;color:#e63946;}
+
+  .countdown{
+    margin-top:20px;
+    padding:14px;
+    background:#f1f5f9;
+    border-radius:12px;
+  }
+
+  .time{
+    font-size:22px;
+    font-weight:bold;
+    color:#1d3557;
+  }
+
+  .label{
+    font-size:12px;
+    color:#555;
+  }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-<div class="card">
+<div class="panel">
+  <h2>Dear Amit 👋</h2>
 
-<div class="header">🥰 HAPPY NEWS YOU ARE RELESE</div>
+  <p>
+    आपकी <span class="highlight">All Market Panel</span><br>
+    अगले <span class="highlight">48 घंटों</span> में या<br>
+    <span class="highlight">रविवार से पहले</span><br>
+    start कर दी जाएगी।
+  </p>
 
-<div class="line"><b>Dear Amit Dattaram Redkar,</b></div>
-
-<div class="line">
-आपके अकाउंट को पिछली गलती के आधार पर unblaicklist कर दिया है।
-  पेमेंट करने के बाद आपका पैनल स्टार्ट हो जायगा । अकाउंट Renew चार्जेज है।
+  <div class="countdown">
+    <div class="label">Remaining Time</div>
+    <div class="time" id="timer">Loading...</div>
+  </div>
 </div>
 
-<div class="line">
-रात <b>11:21 PM</b> पर की गई System Review में  
-हमारे <b>Attempt सफल</b> पाए गए।
-</div>
+<script>
+  const TOTAL_TIME = 48 * 60 * 60 * 1000; // 48 hours in ms
+  const STORAGE_KEY = "panel_timer_start";
 
-<div class="line">
-इसी कारण आपका Account और आपका Panel  
-स्थायी रूप से <b class="red">Pending Mode</b> में डाल दिया गया है।
-</div>
+  // Get or set start time
+  let startTime = localStorage.getItem(STORAGE_KEY);
+  if(!startTime){
+    startTime = Date.now();
+    localStorage.setItem(STORAGE_KEY, startTime);
+  } else {
+    startTime = parseInt(startTime);
+  }
 
-<div class="box red">
-मंगलवार के Charges:
-<br>After Payment Panel Start: 1 hour
-<br>Stop Week Penalty: ₹25000/-
-</div>
+  function updateTimer(){
+    const now = Date.now();
+    let remaining = TOTAL_TIME - (now - startTime);
 
-<div class="line">
-आपका पेमेंट सफलता पूर्वक हो गया है,  
-जल्द ही आपकी पैनल को <b>Start</b> कर दिया जाएगा।  
-इसलिए प्रतिदिन <b>Refresh</b> करते रहें।
-</div>
+    if(remaining <= 0){
+      document.getElementById("timer").innerHTML = "00:00:00";
+      return;
+    }
 
-<div class="footer">
-⚠ Week is final Amount Not Discountable.  
-<br>Thanks For Using Our Services
-</div>
+    let hours = Math.floor(remaining / (1000 * 60 * 60));
+    let minutes = Math.floor((remaining / (1000 * 60)) % 60);
+    let seconds = Math.floor((remaining / 1000) % 60);
 
-</div>
-</div>
+    document.getElementById("timer").innerHTML =
+      String(hours).padStart(2,'0') + ":" +
+      String(minutes).padStart(2,'0') + ":" +
+      String(seconds).padStart(2,'0');
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+</script>
 
 </body>
 </html>
