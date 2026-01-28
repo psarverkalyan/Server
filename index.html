@@ -1,202 +1,203 @@
-<!DOCTYPE html><html lang="hi">
+<!DOCTYPE html>
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All V.32 Panel</title>
-  <style>
-    :root{
-      --bg:#050505; --card:#0b1020; --green:#22ff66;
-      --border:#1f8f4a; --text:#b8ffd9;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:Consolas,monospace}
-    .hidden{display:none}
-    .container{max-width:1200px;margin:auto;padding:16px}
-    .card{
-      background:var(--card);border:1px solid var(--border);
-      border-radius:10px;padding:16px;margin-bottom:16px;
-      box-shadow:0 0 12px rgba(0,255,120,.15)
-    }
-    h1,h2{color:var(--green);margin:0 0 10px}
-    label{font-size:12px;color:#7dffb0}
-    input,select,textarea,button{
-      width:100%;padding:10px;margin-top:6px;background:#000;color:var(--green);
-      border:1px solid var(--border);border-radius:6px
-    }
-    button{cursor:pointer}
-    button:hover{background:#021}
-    .result{
-      margin-top:10px;padding:10px;background:#000;border:1px dashed var(--border);
-      border-radius:6px;white-space:pre-line
-    }
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-    .unlock{border-color:#22ff66}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hold Panel</title>
+
+<style>
+body{
+margin:0;
+font-family:system-ui,Arial;
+background:#0b0b0b;
+color:#fff;
+}
+
+.app{
+max-width:480px;
+margin:auto;
+min-height:100vh;
+padding:15px;
+}
+
+.card{
+background:#111827;
+border-radius:18px;
+padding:18px;
+box-shadow:0 0 20px #000;
+}
+
+h2{
+margin-top:0;
+font-size:20px;
+}
+
+.timer{
+text-align:center;
+font-size:28px;
+font-weight:bold;
+color:#22ff66;
+margin:15px 0;
+}
+
+select{
+width:100%;
+padding:10px;
+border-radius:10px;
+border:none;
+margin-bottom:12px;
+font-size:15px;
+}
+
+ul{
+padding-left:18px;
+}
+
+li{margin:6px 0}
+
+.footer{
+text-align:center;
+opacity:.6;
+margin-top:15px;
+font-size:12px;
+}
+</style>
 </head>
-<body><!-- LOGIN --><div id="loginBox" class="container">
-  <div class="card" style="max-width:420px;margin:auto">
-    <h1>ACCESS LOGIN</h1>
-    <label>USERNAME</label><input id="username">
-    <label>PASSWORD</label><input id="password" type="password">
-    <button onclick="login()">LOGIN</button>
-    <div id="loginErr" class="result hidden"></div>
-  </div>
-</div><!-- APP --><div id="appBox" class="container hidden">
-  <h1>BM ADVANCED PANEL</h1>  <!-- MARKET -->  <div class="card">
-    <h2>MARKET SELECT</h2>
-    <select id="market">
-      <option value="">-- select market --</option>
-      <option>Kalyan</option><option>Main Bazar</option><option>Milan Day</option>
-      <option>Shridevi</option><option>Time Bazar</option><option>Supreme Day</option>
-      <option>Madhur Day</option><option>Kalyan Night</option><option>Milan Night</option>
-      <option>Shridevi Night</option>
-    </select>
-    <!-- UPDATE TOOL -->
+
+<body>
+<div class="app">
 <div class="card">
-  <h2>UPDATE</h2>
-  <div class="result" style="border-style:solid;text-align:center">
-    <div style="font-size:18px;color:#22ff66;font-weight:bold">
-      Shridevi Night OTC (optinol=1)0429 (7652SupremeN)
-    </div>
-    <div style="margin-top:8px;font-size:14px;color:#b8ffd9">
-      280_370_480_679
-      789_148_478_360(Two Set Dp)
-      780_124_570_367
-      357_449_255_377(include One sp)
-    </div>
-  </div>
+
+<select onchange="setLang(this.value)">
+<option value="hi">हिंदी</option>
+<option value="en">English</option>
+<option value="gu">ગુજરાતી</option>
+<option value="mr">मराठी</option>
+<option value="ta">தமிழ்</option>
+<option value="te">తెలుగు</option>
+</select>
+
+<h2 id="title"></h2>
+
+<div id="msg"></div>
+
+<div class="timer" id="timer"></div>
+
+<ul id="loss"></ul>
+
 </div>
-  </div>  <!-- BM TOOL -->  <div class="card">
-    <h2>BM TOOL (FIX ANK)</h2>
-    <div class="grid">
-      <div><label>Previous Jodi</label><input id="bmJodi" placeholder="55"></div>
-      <div><label>Previous Panna</label><input id="bmPanna" placeholder="128"></div>
-    </div>
-    <button onclick="bmTool()">GET FIX ANK</button>
-    <div id="bmOut" class="result"></div>
-  </div>  <!-- AINO TOOL -->  <div class="card">
-    <h2>AINO TOOL (4 SP + 2 DP | NO TP)</h2>
-    <button onclick="ainoTool()">SHOW PANNA</button>
-    <div id="ainoOut" class="result"></div>
-  </div>  <!-- JS ADVANCED -->  <div class="card">
-    <h2>JS ADVANCED CUT TOOL</h2>
-    <input id="advAnk" placeholder="2,3,5,9">
-    <button onclick="jsAdvanced()">CUT WEAK</button>
-    <div id="advOut" class="result"></div>
-  </div>  <!-- VM CALC -->  <div class="card">
-    <h2>VM CALCULATOR (STRONG)</h2>
-    <textarea id="vmIn" rows="3" placeholder="128,245,679,390"></textarea>
-    <button onclick="vmCalc()">CALCULATE</button>
-    <div id="vmOut" class="result"></div>
-  </div>  <!-- FIX JODI -->  <div class="card">
-    <h2>FIX JODI TOOL</h2>
-    <button class="unlock" onclick="openJodiGate()">UNLOCK FIX JODI</button>
-    <div id="jodiOut" class="result"></div>
-  </div>  <!-- SP BYPASS -->  <div class="card">
-    <h2>V.32 SUPER BYPASS OK</h2>
-    <button class="unlock" onclick="openSP()">OPEN TOOL</button>
-  </div>
-</div><!-- FIX JODI POPUP --><div id="jodiGate" class="hidden" style="position:fixed;left:0;right:0;bottom:0;background:#0b1020;border-top:2px solid #22ff66;padding:16px;z-index:9999">
-  <h2 style="color:#22ff66">FIX JODI ACCESS</h2>
-  <input type="password" id="jodiPass" placeholder="Password">
-  <button onclick="checkJodiPass()">VERIFY</button>
-  <div class="result">Amount: Paid</div>
-</div><!-- SP POPUP --><div id="spTool" class="hidden" style="position:fixed;left:0;right:0;bottom:0;background:#0b1020;border-top:2px solid #22ff66;padding:16px;z-index:9999">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <h2 style="color:#22ff66;margin:0">SP SUPER BYPASS OK</h2>
-    <button onclick="closeSP()">X</button>
-  </div>
-  <label>ENTER DIGIT (Only 2 Digit)</label>
-  <input id="spDigit" placeholder="ex: 12">
-  <button onclick="showSPPanel()">SHOW PANEL</button>
-  <div id="spOut" class="result"></div>
-</div><script>
-// LOGIN
-function login(){
-  if(username.value==="amit" && password.value==="Amit@123"){
-    loginBox.style.display="none";
-    appBox.classList.remove("hidden");
-  }else{
-    loginErr.innerText="INVALID LOGIN";
-    loginErr.classList.remove("hidden");
-  }
+
+<div class="footer">BM Advanced Panel</div>
+</div>
+
+<script>
+const text={
+hi:{
+title:"Dear Amit Dattaram Redkar",
+msg:"आपके पैनल की hold की प्रक्रिया शुरु हो गयी है । अगर आप अपने पैनल को वापस पूर्व स्थिति मे लाना चाहते हो तो अपने ब्रोकर से अगले 24 घंटो मे सम्पर्क करे । Hold से होने वाले नुकसान",
+loss:[
+"सप्ताह का पैसा बर्बाद जिसमे JS Tool और Game Update Feature है।",
+"एक महीने का लम्बा पूर्ण-विराम",
+"Hold Remove का शुल्क ₹25000",
+"अपडेट शुल्क का बदलते रहना।"
+]
+},
+en:{
+title:"Dear Amit Dattaram Redkar",
+msg:"Your panel hold process has started. If you want to restore your panel, contact your broker within 24 hours.",
+loss:[
+"Weekly money wasted including JS Tool and Game Update Feature.",
+"One month complete pause",
+"Hold remove charge ₹25000",
+"Update charges may change."
+]
+},
+gu:{
+title:"Dear Amit Dattaram Redkar",
+msg:"તમારા પેનલની હોલ્ડ પ્રક્રિયા શરૂ થઈ ગઈ છે. પાછું લાવવા માટે 24 કલાકમાં બ્રોકરનો સંપર્ક કરો.",
+loss:[
+"JS Tool અને Game Update સાથે સપ્તાહનું નુકસાન.",
+"એક મહિનો પૂર્ણ વિરામ",
+"Hold Remove ફી ₹25000",
+"અપડેટ ચાર્જ બદલાય શકે."
+]
+},
+mr:{
+title:"Dear Amit Dattaram Redkar",
+msg:"तुमच्या पॅनलची होल्ड प्रक्रिया सुरू झाली आहे. 24 तासांत ब्रोकर्सोबत संपर्क करा.",
+loss:[
+"JS Tool व Game Update सह आठवड्याचं नुकसान.",
+"एक महिना पूर्ण थांबा",
+"Hold Remove शुल्क ₹25000",
+"अपडेट शुल्क बदलू शकते."
+]
+},
+ta:{
+title:"Dear Amit Dattaram Redkar",
+msg:"உங்கள் பேனல் hold செயல்முறை தொடங்கியுள்ளது. 24 மணி நேரத்தில் broker ஐ தொடர்பு கொள்ளவும்.",
+loss:[
+"JS Tool & Game Update உடன் வார இழப்பு.",
+"ஒரு மாதம் முழு இடைநிறுத்தம்",
+"Hold Remove கட்டணம் ₹25000",
+"Update கட்டணம் மாறலாம்."
+]
+},
+te:{
+title:"Dear Amit Dattaram Redkar",
+msg:"మీ ప్యానెల్ hold ప్రక్రియ ప్రారంభమైంది. 24 గంటల్లో బ్రోకర్‌ను సంప్రదించండి.",
+loss:[
+"JS Tool & Game Update తో వారపు నష్టం.",
+"ఒక నెల పూర్తిగా నిలిపివేత",
+"Hold Remove ఫీజు ₹25000",
+"Update ఛార్జీలు మారవచ్చు."
+]
+}
+};
+
+function setLang(l){
+localStorage.lang=l;
+load();
 }
 
-// BM TOOL
-const ankMap={0:[2,3,5,9],1:[4,5,7,9],2:[0,2,6,8],3:[0,1,8,9],4:[1,3,6,7],5:[2,4,6,7],6:[0,3,6,8],7:[1,2,4,7],8:[2,5,6,8],9:[1,4,7,8]};
-let currentAnk=[];
-function bmTool(){
-  if(!market.value){bmOut.innerText="Select market";return;}
-  if(bmJodi.value.length!==2||bmPanna.value.length!==3){bmOut.innerText="Invalid input";return;}
-  let s=0;[...bmJodi.value,...bmPanna.value].forEach(d=>s+=+d);
-  currentAnk=ankMap[s%10];
-  bmOut.innerText="FIX ANK - "+currentAnk.join(", ");
+function load(){
+let l=localStorage.lang||"hi";
+document.querySelector("select").value=l;
+document.getElementById("title").innerText=text[l].title;
+document.getElementById("msg").innerText=text[l].msg;
+let ul=document.getElementById("loss");
+ul.innerHTML="";
+text[l].loss.forEach(x=>{
+let li=document.createElement("li");
+li.innerText=x;
+ul.appendChild(li);
+});
 }
 
-// AINO TOOL
-const ainoData={
-0:["460","190","145","569","235","280","370","578","550","244","334","488","118"],
-1:["128","137","236","678","245","290","470","579","119","560","669","399","588"],
-2:["345","147","246","679","138","390","480","589","228","688","110","499"],
-3:["670","157","256","120","139","148","346","689","366","699","788","599"],
-4:["356","158","130","680","239","248","347","789","440","880"],
-5:["258","159","456","690","230","140","357","780","799","550"],
-6:["123","178","268","367","240","259","470","457","466","660"],
-7:["124","179","269","467","340","359","458","890","449","566"],
-8:["125","170","260","567","134","189","369","468","466","477"],
-9:["135","180","360","568","234","289","379","478","559","117"]};
-const isTP=p=>p[0]===p[1]&&p[1]===p[2];
-const isDP=p=>(p[0]===p[1]||p[1]===p[2]||p[0]===p[2])&&!isTP(p);
-const isSP=p=>!isDP(p)&&!isTP(p);
-function ainoTool(){
-  if(!currentAnk.length){ainoOut.innerText="Run BM Tool first";return;}
-  let out="";
-  currentAnk.forEach(a=>{
-    let list=ainoData[a];
-    let sp=list.filter(isSP).slice(0,4);
-    let dp=list.filter(isDP).slice(0,2);
-    out+="ANK "+a+" - "+[...sp,...dp].join(", ")+"\n";
-  });
-  ainoOut.innerText=out;
+load();
+
+/* TIMER (24 HOURS – NEVER RESTART) */
+let start=localStorage.startTime;
+if(!start){
+start=Date.now();
+localStorage.startTime=start;
 }
 
-// JS ADVANCED
-function jsAdvanced(){
-  let arr=advAnk.value.split(",").map(x=>+x).filter(x=>!isNaN(x));
-  if(arr.length<2){advOut.innerText="Enter min 2 ank";return;}
-  let weak=arr[Math.floor(Math.random()*arr.length)];
-  currentAnk=arr.filter(a=>a!==weak);
-  advOut.innerText="CUT - "+weak+"\nLOCKED - "+currentAnk.join(", ");
-}
+function tick(){
+let diff=24*60*60*1000-(Date.now()-start);
+if(diff<0) diff=0;
 
-// VM CALC
-function vmCalc(){
-  let list=vmIn.value.split(",").map(x=>x.trim()).filter(x=>x.length===3);
-  if(list.length<3){vmOut.innerText="Enter more panna";return;}
-  let score={};
-  list.forEach(p=>{score[p[0]]=(score[p[0]]||0)+1;score[p[1]]=(score[p[1]]||0)+2;score[p[2]]=(score[p[2]]||0)+1;});
-  let strong=Object.keys(score).sort((a,b)=>score[b]-score[a]).slice(0,5);
-  vmOut.innerText="STRONG DIGITS - "+strong.join(", ");
-}
+let h=Math.floor(diff/3600000);
+let m=Math.floor(diff%3600000/60000);
+let s=Math.floor(diff%60000/1000);
 
-// FIX JODI
-function openJodiGate(){jodiGate.classList.remove("hidden");}
-function checkJodiPass(){
-  if(jodiPass.value!=="sarja0987"){alert("WRONG PASSWORD");return;}
-  jodiGate.classList.add("hidden");
-  let j=[];currentAnk.forEach(a=>{j.push(a+""+((a+3)%10));j.push(((a+3)%10)+""+a);j.push(a+""+((a+6)%10));});
-  jodiOut.innerText="FIX JODI - "+[...new Set(j)].join(", ");
+document.getElementById("timer").innerText=
+String(h).padStart(2,"0")+":"+
+String(m).padStart(2,"0")+":"+
+String(s).padStart(2,"0");
 }
+setInterval(tick,1000);
+tick();
+</script>
 
-// SP BYPASS
-const spPanelData={1:["128","137","236","678","245","290","470","579"],2:["129","147","246","679","345","390","480","589"],3:["120","157","256","670","139","148","346","689"],4:["130","158","356","680","239","248","347","789"],5:["140","159","456","690","230","258","357","780"],6:["123","178","268","367","240","259","457","790"],7:["124","179","269","467","340","359","458","890"],8:["125","170","260","567","134","189","369","468"],9:["135","180","360","568","234","289","379","478"],0:["145","190","460","569","235","280","370","578"]};
-function openSP(){spTool.classList.remove("hidden");}
-function closeSP(){spTool.classList.add("hidden");}
-function showSPPanel(){
-  let v=spDigit.value.trim();
-  if(v.length!==2||isNaN(v)){spOut.innerText="Enter exactly 2 digit";return;}
-  let p=[...spPanelData[v[0]],...spPanelData[v[1]]];
-  spOut.innerText="DIGIT - "+v+"\nSP PANEL (16):\n"+p.join(", ");
-}
-</script></body>
+</body>
 </html>
