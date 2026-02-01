@@ -1,202 +1,136 @@
-<!DOCTYPE html>
-<html lang="hi">
+<!DOCTYPE html><html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hold Panel</title>
-
+<title>All V.32 Panel</title>
 <style>
-body{
-margin:0;
-font-family:system-ui,Arial;
-background:#0b0b0b;
-color:#fff;
-}
-
-.app{
-max-width:480px;
-margin:auto;
-min-height:100vh;
-padding:15px;
-}
-
-.card{
-background:#111827;
-border-radius:18px;
-padding:18px;
-box-shadow:0 0 20px #000;
-}
-
-h2{
-margin-top:0;
-font-size:20px;
-}
-
-.timer{
-text-align:center;
-font-size:28px;
-font-weight:bold;
-color:#22ff66;
-margin:15px 0;
-}
-
-select{
-width:100%;
-padding:10px;
-border-radius:10px;
-border:none;
-margin-bottom:12px;
-font-size:15px;
-}
-
-ul{
-padding-left:18px;
-}
-
-li{margin:6px 0}
-
-.footer{
-text-align:center;
-opacity:.6;
-margin-top:15px;
-font-size:12px;
-}
+:root{--bg:#050505;--card:#0b1020;--green:#22ff66;--border:#1f8f4a;--text:#b8ffd9}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Consolas,monospace}
+.hidden{display:none}
+.container{max-width:1200px;margin:auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;box-shadow:0 0 12px rgba(0,255,120,.15)}
+h1,h2{color:var(--green);margin:0 0 10px}
+label{font-size:12px;color:#7dffb0}
+input,select,textarea,button{width:100%;padding:10px;margin-top:6px;background:#000;color:var(--green);border:1px solid var(--border);border-radius:6px}
+button{cursor:pointer}
+.result{margin-top:10px;padding:10px;background:#000;border:1px dashed var(--border);border-radius:6px;white-space:pre-line}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.unlock{border-color:#22ff66}
 </style>
 </head>
 
 <body>
-<div class="app">
-<div class="card">
 
-<select onchange="setLang(this.value)">
-<option value="hi">हिंदी</option>
-<option value="en">English</option>
-<option value="gu">ગુજરાતી</option>
-<option value="mr">मराठी</option>
-<option value="ta">தமிழ்</option>
-<option value="te">తెలుగు</option>
-</select>
-
-<h2 id="title"></h2>
-
-<div id="msg"></div>
-
-<div class="timer" id="timer"></div>
-
-<ul id="loss"></ul>
-
+<div id="loginBox" class="container">
+<div class="card" style="max-width:420px;margin:auto">
+<h1>ACCESS LOGIN</h1>
+<label>USERNAME</label><input id="username">
+<label>PASSWORD</label><input id="password" type="password">
+<button onclick="login()">LOGIN</button>
+<div id="loginErr" class="result hidden"></div>
+</div>
 </div>
 
-<div class="footer">BM Advanced Panel</div>
+<div id="appBox" class="container hidden">
+<h1>LIFETIME UNLOCKED</h1>
+
+<div class="card">
+<h2>MARKET SELECT</h2>
+<select id="market">
+<option value="">-- select market --</option>
+<option>Kalyan</option><option>Main Bazar</option><option>Milan Day</option>
+<option>Shridevi</option><option>Time Bazar</option><option>Supreme Day</option>
+<option>Madhur Day</option><option>Kalyan Night</option><option>Milan Night</option>
+<option>Shridevi Night</option>
+</select>
+</div>
+
+<div class="card">
+<h2>BM TOOL (FIX ANK)</h2>
+<div class="grid">
+<div><label>Previous Jodi</label><input id="bmJodi"></div>
+<div><label>Previous Panna</label><input id="bmPanna"></div>
+</div>
+<button onclick="bmTool()">GET FIX ANK</button>
+<div id="bmOut" class="result"></div>
+</div>
+
+<div class="card">
+<h2>AINO TOOL</h2>
+<button onclick="ainoTool()">SHOW PANNA</button>
+<div id="ainoOut" class="result"></div>
+</div>
+
+<div class="card">
+<h2>VM CALCULATOR</h2>
+<textarea id="vmIn" rows="3"></textarea>
+<button onclick="vmCalc()">CALCULATE</button>
+<div id="vmOut" class="result"></div>
+</div>
+
+<div class="card">
+<h2>FIX JODI TOOL</h2>
+<button class="unlock" onclick="openJodiGate()">UNLOCK FIX JODI</button>
+<div id="jodiOut" class="result"></div>
+</div>
+
+<div class="card">
+<h2>V.32 SUPER BYPASS OK</h2>
+<button class="unlock" onclick="openSP()">OPEN TOOL</button>
+</div>
+</div>
+
+<div id="jodiGate" class="hidden" style="position:fixed;left:0;right:0;bottom:0;background:#0b1020;border-top:2px solid #22ff66;padding:16px">
+<input type="password" id="jodiPass">
+<button onclick="checkJodiPass()">VERIFY</button>
+</div>
+
+<div id="spTool" class="hidden" style="position:fixed;left:0;right:0;bottom:0;background:#0b1020;border-top:2px solid #22ff66;padding:16px">
+<input id="spDigit">
+<button onclick="showSPPanel()">SHOW PANEL</button>
+<div id="spOut" class="result"></div>
 </div>
 
 <script>
-const text={
-hi:{
-title:"Dear Amit Dattaram Redkar",
-msg:"आपके पैनल की hold की प्रक्रिया शुरु हो गयी है । अगर आप अपने पैनल को वापस पूर्व स्थिति मे लाना चाहते हो तो अपने ब्रोकर से अगले 24 घंटो मे सम्पर्क करे । Hold से होने वाले नुकसान",
-loss:[
-"सप्ताह का पैसा बर्बाद जिसमे JS Tool और Game Update Feature है।",
-"एक महीने का लम्बा पूर्ण-विराम",
-"Hold Remove का शुल्क ₹25000",
-"अपडेट शुल्क का बदलते रहना।"
-]
-},
-en:{
-title:"Dear Amit Dattaram Redkar",
-msg:"Your panel hold process has started. If you want to restore your panel, contact your broker within 24 hours.",
-loss:[
-"Weekly money wasted including JS Tool and Game Update Feature.",
-"One month complete pause",
-"Hold remove charge ₹25000",
-"Update charges may change."
-]
-},
-gu:{
-title:"Dear Amit Dattaram Redkar",
-msg:"તમારા પેનલની હોલ્ડ પ્રક્રિયા શરૂ થઈ ગઈ છે. પાછું લાવવા માટે 24 કલાકમાં બ્રોકરનો સંપર્ક કરો.",
-loss:[
-"JS Tool અને Game Update સાથે સપ્તાહનું નુકસાન.",
-"એક મહિનો પૂર્ણ વિરામ",
-"Hold Remove ફી ₹25000",
-"અપડેટ ચાર્જ બદલાય શકે."
-]
-},
-mr:{
-title:"Dear Amit Dattaram Redkar",
-msg:"तुमच्या पॅनलची होल्ड प्रक्रिया सुरू झाली आहे. 24 तासांत ब्रोकर्सोबत संपर्क करा.",
-loss:[
-"JS Tool व Game Update सह आठवड्याचं नुकसान.",
-"एक महिना पूर्ण थांबा",
-"Hold Remove शुल्क ₹25000",
-"अपडेट शुल्क बदलू शकते."
-]
-},
-ta:{
-title:"Dear Amit Dattaram Redkar",
-msg:"உங்கள் பேனல் hold செயல்முறை தொடங்கியுள்ளது. 24 மணி நேரத்தில் broker ஐ தொடர்பு கொள்ளவும்.",
-loss:[
-"JS Tool & Game Update உடன் வார இழப்பு.",
-"ஒரு மாதம் முழு இடைநிறுத்தம்",
-"Hold Remove கட்டணம் ₹25000",
-"Update கட்டணம் மாறலாம்."
-]
-},
-te:{
-title:"Dear Amit Dattaram Redkar",
-msg:"మీ ప్యానెల్ hold ప్రక్రియ ప్రారంభమైంది. 24 గంటల్లో బ్రోకర్‌ను సంప్రదించండి.",
-loss:[
-"JS Tool & Game Update తో వారపు నష్టం.",
-"ఒక నెల పూర్తిగా నిలిపివేత",
-"Hold Remove ఫీజు ₹25000",
-"Update ఛార్జీలు మారవచ్చు."
-]
-}
-};
-
-function setLang(l){
-localStorage.lang=l;
-load();
+function login(){
+if(username.value==="amit"&&password.value==="Amit@123"){
+loginBox.style.display="none";appBox.classList.remove("hidden");
+}else{loginErr.innerText="INVALID LOGIN";loginErr.classList.remove("hidden");}
 }
 
-function load(){
-let l=localStorage.lang||"hi";
-document.querySelector("select").value=l;
-document.getElementById("title").innerText=text[l].title;
-document.getElementById("msg").innerText=text[l].msg;
-let ul=document.getElementById("loss");
-ul.innerHTML="";
-text[l].loss.forEach(x=>{
-let li=document.createElement("li");
-li.innerText=x;
-ul.appendChild(li);
-});
+const ankMap={0:[2,3,5,9],1:[4,5,7,9],2:[0,2,6,8],3:[0,1,8,9],4:[1,3,6,7],5:[2,4,6,7],6:[0,3,6,8],7:[1,2,4,7],8:[2,5,6,8],9:[1,4,7,8]};
+let currentAnk=[];
+
+function bmTool(){
+let s=0;[...bmJodi.value,...bmPanna.value].forEach(d=>s+=+d);
+currentAnk=ankMap[s%10];
+bmOut.innerText="FIX ANK - "+currentAnk.join(", ");
 }
 
-load();
+const ainoData={0:["460","190","145"],1:["128","137"],2:["345","147"],3:["670","157"],4:["356","158"],5:["258","159"],6:["123","178"],7:["124","179"],8:["125","170"],9:["135","180"]};
 
-/* TIMER (24 HOURS – NEVER RESTART) */
-let start=localStorage.startTime;
-if(!start){
-start=Date.now();
-localStorage.startTime=start;
+function ainoTool(){
+let out="";
+currentAnk.forEach(a=>out+="ANK "+a+" - "+ainoData[a].join(", ")+"\n");
+ainoOut.innerText=out;
 }
 
-function tick(){
-let diff=24*60*60*1000-(Date.now()-start);
-if(diff<0) diff=0;
-
-let h=Math.floor(diff/3600000);
-let m=Math.floor(diff%3600000/60000);
-let s=Math.floor(diff%60000/1000);
-
-document.getElementById("timer").innerText=
-String(h).padStart(2,"0")+":"+
-String(m).padStart(2,"0")+":"+
-String(s).padStart(2,"0");
+function vmCalc(){
+let list=vmIn.value.split(",").map(x=>x.trim());
+vmOut.innerText="STRONG - "+list.join(",");
 }
-setInterval(tick,1000);
-tick();
+
+function openJodiGate(){jodiGate.classList.remove("hidden");}
+function checkJodiPass(){jodiGate.classList.add("hidden");}
+
+const spPanelData={1:["128","137"],2:["129","147"],3:["120","157"],4:["130","158"],5:["140","159"],6:["123","178"],7:["124","179"],8:["125","170"],9:["135","180"],0:["145","190"]};
+
+function openSP(){spTool.classList.remove("hidden");}
+function showSPPanel(){
+let v=spDigit.value;
+spOut.innerText=[...spPanelData[v[0]],...spPanelData[v[1]]].join(", ");
+}
 </script>
 
 </body>
