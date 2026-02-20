@@ -1,74 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BM Kalyan Panel</title>
+
 <style>
 body {
-    background-color: black;
+    margin: 0;
+    padding: 0;
+    background: black;
     font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     color: #ff0000;
+}
+
+/* App Card */
+.app-container {
+    width: 90%;
+    max-width: 350px;
+    background: #0a0a0a;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 0 25px red;
     text-align: center;
 }
 
-.container {
-    margin-top: 100px;
+/* Title */
+h1 {
+    font-size: 20px;
+    text-shadow: 0 0 15px red;
 }
 
+/* Input Fields */
 input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
     background: black;
-    border: 2px solid #ff0000;
-    color: #ff0000;
-    padding: 10px;
-    margin: 10px;
-    width: 250px;
-    text-align: center;
+    border: 2px solid red;
+    border-radius: 10px;
+    color: red;
     box-shadow: 0 0 10px red;
+    text-align: center;
 }
 
+/* Button */
 button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
     background: black;
-    border: 2px solid #ff0000;
-    color: #ff0000;
-    padding: 10px 20px;
-    cursor: pointer;
+    border: 2px solid red;
+    border-radius: 10px;
+    color: red;
+    font-weight: bold;
     box-shadow: 0 0 15px red;
 }
 
-button:hover {
+button:active {
     background: red;
     color: black;
 }
 
-h1 {
-    text-shadow: 0 0 20px red;
-}
-
+/* Hide key section */
 #keySection {
     display: none;
+}
+
+.message {
+    margin-top: 10px;
+    font-size: 14px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="loginSection">
+<div class="app-container" id="loginSection">
     <h1>BM Kalyan Panel</h1>
-    <h2>Welcome Back Amit</h2>
+    <p>Welcome Back Amit</p>
 
-    <input type="text" id="username" placeholder="Enter Username"><br>
-    <input type="password" id="password" placeholder="Enter Password"><br>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
     <button onclick="login()">Login</button>
-
-    <p id="loginMessage"></p>
+    <div class="message" id="loginMessage"></div>
 </div>
 
-<div class="container" id="keySection">
-    <h1>Enter Activation Key</h1>
+<div class="app-container" id="keySection">
+    <h1>Activation Panel</h1>
 
-    <input type="text" id="keyInput" placeholder="Enter Key"><br>
+    <input type="text" id="keyInput" placeholder="Enter Activation Key">
     <button onclick="activateKey()">Activate Now</button>
 
-    <p id="keyMessage"></p>
+    <div class="message" id="keyMessage"></div>
 </div>
 
 <script>
@@ -80,7 +108,7 @@ function login() {
         document.getElementById("loginSection").style.display = "none";
         document.getElementById("keySection").style.display = "block";
     } else {
-        document.getElementById("loginMessage").innerHTML = "Invalid Username or Password";
+        document.getElementById("loginMessage").innerHTML = "❌ Invalid Username or Password";
     }
 }
 
@@ -88,9 +116,9 @@ function activateKey() {
     var key = document.getElementById("keyInput").value;
 
     if(key === "456fyjhiddykmifseg63fujfegcv") {
-        document.getElementById("keyMessage").innerHTML = "✔ Successfully Activated!";
+        document.getElementById("keyMessage").innerHTML = "✅ Successfully Activated!";
     } else {
-        document.getElementById("keyMessage").innerHTML = "✖ Wrong Key!";
+        document.getElementById("keyMessage").innerHTML = "❌ Wrong Key!";
     }
 }
 </script>
