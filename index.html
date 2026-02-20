@@ -1,102 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Security Alert</title>
-
+<title>BM Kalyan Panel</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
 body {
-    margin: 0;
-    height: 100vh;
-    background: radial-gradient(circle at top, #0f2027, #000);
-    font-family: 'Share Tech Mono', monospace;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #00ffcc;
-}
-
-.panel {
-    width: 92%;
-    max-width: 420px;
-    background: rgba(0, 0, 0, 0.85);
-    border: 2px solid #ff0033;
-    box-shadow: 0 0 25px #ff0033;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.header {
-    color: #ff0033;
-    text-align: center;
-    font-size: 18px;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-}
-
-.message {
-    font-size: 15px;
-    line-height: 1.6;
-}
-
-.name {
-    color: #00ffff;
-}
-
-.status-box {
-    margin-top: 20px;
-    padding: 12px;
-    border: 1px dashed #ff0033;
+    background-color: black;
+    font-family: monospace;
+    color: #ff0000;
     text-align: center;
 }
 
-.status {
-    font-size: 20px;
-    color: #ff0033;
-    animation: blink 1s infinite;
+.container {
+    margin-top: 100px;
 }
 
-.footer {
-    margin-top: 15px;
+input {
+    background: black;
+    border: 2px solid #ff0000;
+    color: #ff0000;
+    padding: 10px;
+    margin: 10px;
+    width: 250px;
     text-align: center;
-    font-size: 12px;
-    color: #888;
+    box-shadow: 0 0 10px red;
 }
 
-@keyframes blink {
-    0% {opacity: 1;}
-    50% {opacity: 0.3;}
-    100% {opacity: 1;}
+button {
+    background: black;
+    border: 2px solid #ff0000;
+    color: #ff0000;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 0 15px red;
+}
+
+button:hover {
+    background: red;
+    color: black;
+}
+
+h1 {
+    text-shadow: 0 0 20px red;
+}
+
+#keySection {
+    display: none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="panel">
-    <div class="header">
-        ⚠ SECURITY NOTICE ⚠
-    </div>
+<div class="container" id="loginSection">
+    <h1>BM Kalyan Panel</h1>
+    <h2>Welcome Back Amit</h2>
 
-    <div class="message">
-        Dear <span class="name">Amit</span>,<br><br>
-        Your panel has been <b>PERMANENTLY SUSPENDED</b>.<br>
-        You are now <b>PERMANENTLY BLOCKED</b> from the market.<br><br>
-        Any further access attempt will be logged and monitored.
-    </div>
+    <input type="text" id="username" placeholder="Enter Username"><br>
+    <input type="password" id="password" placeholder="Enter Password"><br>
+    <button onclick="login()">Login</button>
 
-    <div class="status-box">
-        STATUS : <div class="status">SUSPENDED / BLOCKED</div>
-    </div>
-
-    <div class="footer">
-        Thanks For Participate<br>
-        © All Matka Market Team
-    </div>
+    <p id="loginMessage"></p>
 </div>
+
+<div class="container" id="keySection">
+    <h1>Enter Activation Key</h1>
+
+    <input type="text" id="keyInput" placeholder="Enter Key"><br>
+    <button onclick="activateKey()">Activate Now</button>
+
+    <p id="keyMessage"></p>
+</div>
+
+<script>
+function login() {
+    var user = document.getElementById("username").value;
+    var pass = document.getElementById("password").value;
+
+    if(user === "amit" && pass === "Amit@123") {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("keySection").style.display = "block";
+    } else {
+        document.getElementById("loginMessage").innerHTML = "Invalid Username or Password";
+    }
+}
+
+function activateKey() {
+    var key = document.getElementById("keyInput").value;
+
+    if(key === "456fyjhiddykmifseg63fujfegcv") {
+        document.getElementById("keyMessage").innerHTML = "✔ Successfully Activated!";
+    } else {
+        document.getElementById("keyMessage").innerHTML = "✖ Wrong Key!";
+    }
+}
+</script>
 
 </body>
 </html>
